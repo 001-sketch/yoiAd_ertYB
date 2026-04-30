@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Send, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { subscribe } from '../services/subscriptionService';
 import { SITE_NAME } from '../constants';
 
 export const Subscribe = () => {
@@ -18,25 +17,12 @@ export const Subscribe = () => {
     setErrorMessage('');
 
     try {
-      // Use clean version of email as ID to prevent duplicate subs easily
-      const subId = email.toLowerCase().replace(/[^a-z0-9]/g, '_');
-      const subRef = doc(db, 'subscriptions', subId);
-      
-      await setDoc(subRef, {
-        email: email.toLowerCase(),
-        createdAt: serverTimestamp(),
-        status: 'active'
-      });
-
+      await subscribe(email);
       setStatus('success');
       setEmail('');
-    } catch (error) {
+    } catch {
       setStatus('error');
-      try {
-        handleFirestoreError(error, OperationType.WRITE, `subscriptions/${email}`);
-      } catch (err: any) {
-        setErrorMessage("Transmission interrupted. Please check your signal.");
-      }
+      setErrorMessage("Transmission interrupted. Please check your signal.");
     }
   };
 
