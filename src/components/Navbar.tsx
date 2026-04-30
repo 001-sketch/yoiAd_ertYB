@@ -51,9 +51,9 @@ export const Navbar = () => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group" aria-label={`${SITE_NAME} - Go to home page`}>
             <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-colors">
-              <Cpu size={20} className="text-primary" />
+              <Cpu size={20} className="text-primary" aria-hidden="true" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-display font-bold tracking-tight text-white">
