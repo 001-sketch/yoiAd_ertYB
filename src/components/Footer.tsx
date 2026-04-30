@@ -33,10 +33,10 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-bg-dark border-t border-border pt-24 pb-12">
+    <footer className="bg-bg-dark border-t border-border pt-12 pb-8">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-20">
-          <div className="md:col-span-2 space-y-6 text-center md:text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-10">
+          <div className="md:col-span-2 space-y-4 text-center md:text-left">
             <Link to="/" className="flex justify-center md:justify-start items-center gap-2 group">
               <Cpu size={24} className="text-primary group-hover:scale-110 transition-transform" />
               <span className="text-2xl font-display font-black tracking-tight text-white">
@@ -60,7 +60,7 @@ export const Footer = () => {
           </div>
 
           {FOOTER_SECTIONS.map((section) => (
-            <div key={section.title} className="space-y-6 text-center md:text-left">
+            <div key={section.title} className="space-y-4 text-center md:text-left">
               <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-primary">{section.title}</h4>
               <ul className="space-y-3">
                 {section.links.map((link) => (
@@ -79,7 +79,7 @@ export const Footer = () => {
           ))}
         </div>
 
-        <div className="space-y-6 pt-12 border-t border-border">
+        <div className="space-y-4 pt-8 border-t border-border">
           <h4 className="text-xs font-mono uppercase tracking-[0.2em] text-primary text-center md:text-left">Network Status</h4>
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-4">

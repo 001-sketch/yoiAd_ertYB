@@ -47,9 +47,9 @@ export const NewsFeed = () => {
   }, [category, timeframe]);
 
   return (
-    <section id="feed" className="py-24 px-6 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-12">
-        <div className="space-y-4">
+    <section id="feed" className="py-12 px-6 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-4 mb-8">
+        <div className="space-y-2">
           <h2 className="text-4xl font-display font-black tracking-tighter uppercase">
             The <span className="text-primary">Intelligence</span> Stream
           </h2>
@@ -99,7 +99,7 @@ export const NewsFeed = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex flex-col items-center justify-center py-40 space-y-4"
+            className="flex flex-col items-center justify-center py-16 space-y-4"
           >
             <Loader2 size={40} className="text-primary animate-spin" />
             <p className="text-xs font-mono uppercase tracking-widest text-text-muted">Synchronizing with Global Node...</p>
@@ -109,7 +109,7 @@ export const NewsFeed = () => {
             key="error"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col items-center justify-center py-40 space-y-4 text-center"
+            className="flex flex-col items-center justify-center py-16 space-y-4 text-center"
           >
             <AlertCircle size={40} className="text-red-500" />
             <p className="text-white font-display font-medium">{error}</p>
