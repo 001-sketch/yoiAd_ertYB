@@ -41,8 +41,8 @@ export const Subscribe = () => {
   };
 
   return (
-    <section id="subscribe" className="py-24 px-6 bg-white text-black">
-      <div className="max-w-4xl mx-auto text-center space-y-12">
+    <section id="subscribe" className="py-12 px-6 bg-white text-black">
+      <div className="max-w-4xl mx-auto text-center space-y-8">
         <div className="space-y-4">
           <h2 className="text-5xl md:text-7xl font-display font-black tracking-tighter uppercase leading-[0.85]">
             Join the <br />
@@ -106,7 +106,7 @@ export const Subscribe = () => {
           )}
         </form>
 
-        <div className="flex flex-wrap justify-center gap-8 pt-8 opacity-50">
+        <div className="flex flex-wrap justify-center gap-6 pt-4 opacity-50">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest">
             <ShieldCheck size={14} />
             <span>Privacy First Architecture</span>

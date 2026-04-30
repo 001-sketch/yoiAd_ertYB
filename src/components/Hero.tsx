@@ -5,13 +5,13 @@ import { SITE_NAME, SITE_DESCRIPTION } from '../constants';
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden pt-20 tech-grid">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+    <section className="relative min-h-[60vh] flex flex-col justify-center overflow-hidden pt-20 pb-10 tech-grid">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-8"
+          transition={{ duration: 0.6 }}
+          className="space-y-5"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-mono text-primary uppercase tracking-widest">
             <Zap size={12} />
@@ -27,7 +27,7 @@ export const Hero = () => {
             {SITE_DESCRIPTION}
           </p>
 
-          <div className="flex items-center gap-6 pt-4">
+          <div className="flex items-center gap-6">
             <div className="flex flex-col">
               <span className="text-2xl font-display font-bold">24/7</span>
               <span className="text-[10px] uppercase tracking-wider text-text-muted">Live Coverage</span>
