@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    
+    // --- Subscription Validation ---
+    function isValidSubscription(data) {
+      return data.keys().hasAll(['email', 'createdAt', 'status'])
+        && data.keys().size() == 3
+        && data.email is string
+        && data.email.size() <= 256
+        && data.email.matches('^[^@]+@[^@]+\\.[^@]+$')
+        && data.createdAt == request.time
+        && data.status in ['active', 'unsubscribed'];
+    }
+
+    match /subscriptions/{subId} {
+      // 1. Path Variable Hardening
+      allow get: if false; // Private by default
+      allow list: if false; // Never list all subscribers
+      
+      // Public can subscribe
+      allow create: if isValidId(subId) 
+        && isValidSubscription(incoming())
+        && incoming().status == 'active';
+
+      // Updates only allow status changes (e.g. for unsubscribing)
+      // Usually users would click a link with a token, but here we just have a simple form.
+      // For now, let's block updates from the client side without auth.
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "Subscription": {
+      "title": "Subscription",
+      "description": "User email subscription for the newsletter",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The subscriber's email address"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the subscription was created"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "unsubscribed"],
+          "description": "Current status of the subscription"
+        }
+      },
+      "required": ["email", "createdAt", "status"]
+    }
+  },
+  "firestore": {
+    "subscriptions/{subscriptionId}": {
+      "schema": "Subscription",
+      "description": "Collection of newsletter subscriptions"
+    }
+  }
+}
