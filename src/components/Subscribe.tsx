@@ -129,7 +129,7 @@ export const Subscribe = () => {
           </div>
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest">
             <span>Verified Subscribers</span>
-            <span className="font-bold">12K+</span>
+            <span className="font-bold">100+</span>
           </div>
         </div>
       </div>
