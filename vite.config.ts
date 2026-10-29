@@ -10,6 +10,10 @@ export default defineConfig(({mode}) => {
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY),
       'process.env.NEWSDATA_API_KEY': JSON.stringify(env.NEWSDATA_API_KEY || process.env.NEWSDATA_API_KEY || 'pub_6b2014d565ad49a58bee720bb2521d8d'),
+      'process.env.EMAILJS_SERVICE_ID': JSON.stringify(env.EMAILJS_SERVICE_ID || process.env.EMAILJS_SERVICE_ID || 'service_h57y5e2'),
+      'process.env.EMAILJS_TEMPLATE_ID': JSON.stringify(env.EMAILJS_TEMPLATE_ID || process.env.EMAILJS_TEMPLATE_ID || 'template_n0luv6t'),
+      'process.env.EMAILJS_PUBLIC_KEY': JSON.stringify(env.EMAILJS_PUBLIC_KEY || process.env.EMAILJS_PUBLIC_KEY || 'JGJikbU3_35F5EjaS'),
+      'process.env.ADMIN_EMAIL': JSON.stringify(env.ADMIN_EMAIL || process.env.ADMIN_EMAIL || 'bytedailynews@gmail.com'),
     },
     resolve: {
       alias: {
