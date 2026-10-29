@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cpu, Instagram, ExternalLink } from 'lucide-react';
+import { Cpu, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { SITE_NAME, FOOTER_SECTIONS } from '../constants';
@@ -46,17 +46,6 @@ export const Footer = () => {
             <p className="text-text-muted max-w-md mx-auto md:mx-0 font-light leading-relaxed">
               Real-time tech intelligence synthesized for the modern pioneer. From the streets of Nairobi to the clusters of Silicon Valley.
             </p>
-            <div className="flex justify-center md:justify-start gap-4 pt-4">
-              <a 
-                href="https://instagram.com/byte_daily" 
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-bg-card border border-border rounded-lg text-text-muted hover:text-primary hover:border-primary/50 transition-all group"
-              >
-                <Instagram size={18} className="group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-mono uppercase tracking-widest">@byte_daily</span>
-              </a>
-            </div>
           </div>
 
           {FOOTER_SECTIONS.map((section) => (
