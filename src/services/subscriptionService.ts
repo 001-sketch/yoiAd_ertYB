@@ -7,7 +7,7 @@ const STORAGE_KEY = 'byte_subscribed_emails';
 
 // EmailJS & Notification target configuration
 export const NOTIFICATION_RECIPIENT = process.env.ADMIN_EMAIL || 'bytedailynews@gmail.com';
-const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_h57y5e2';
+const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || 'service_3kvfetr';
 const EMAILJS_TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID || 'template_n0luv6t';
 const EMAILJS_PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY || 'JGJikbU3_35F5EjaS';
 
@@ -77,16 +77,22 @@ async function dispatchEmailNotification(subscriberEmail: string): Promise<boole
   };
 
   try {
-    await emailjs.send(
+    console.log(`[EmailJS] Initiating dispatch to ${NOTIFICATION_RECIPIENT} for: ${subscriberEmail}`);
+    const res = await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
       templateParams,
       EMAILJS_PUBLIC_KEY
     );
-    console.log(`[EmailJS] Alert successfully dispatched to ${NOTIFICATION_RECIPIENT} for subscriber: ${subscriberEmail}`);
+    console.log(`[EmailJS] ✅ Dispatch successful! Status: ${res.status}, Text: ${res.text}`);
     return true;
-  } catch (err) {
-    console.warn('[EmailJS] Notification dispatch warning:', err);
+  } catch (err: any) {
+    console.error('[EmailJS] ❌ Dispatch failed:', {
+      error: err,
+      status: err?.status,
+      text: err?.text,
+      message: err?.message
+    });
     return false;
   }
 }
@@ -128,7 +134,7 @@ export async function subscribeToNewsletter(rawEmail: string): Promise<Subscript
     markEmailSubscribedLocally(email);
 
     // 3. Dispatch EmailJS notification to bytedailynews@gmail.com
-    dispatchEmailNotification(email).catch(() => {});
+    await dispatchEmailNotification(email);
 
     return {
       success: true,
