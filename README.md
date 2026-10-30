@@ -1,20 +1,73 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Byte_daily — Nairobi Tech Pulse
 
-# Run and deploy your AI Studio app
+> Real-time tech intelligence synthesized for the modern pioneer. From the streets of Nairobi to the clusters of Silicon Valley.
 
-This contains everything you need to run your app locally.
+---
 
-View your app in AI Studio: https://ai.studio/apps/2d18a1f3-9095-44be-8d37-33d5798da9ff
+## Overview
 
-## Run Locally
+**Byte_daily** is a real-time technology news platform focused on the African tech ecosystem and global innovation. It aggregates, curates, and delivers high-signal news from Nairobi's Silicon Savannah and international technology markets — formatted for readability and speed.
 
-**Prerequisites:**  Node.js
+The platform is designed to keep professionals, founders, and enthusiasts informed on what matters, without the noise.
 
+---
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Services
+
+| Service | Description |
+|---|---|
+| **Live News Feed** | Real-time tech news sourced from the NewsData.io API, filtered for Kenya and global technology categories. |
+| **AI Article Synthesis** | Powered by Gemini AI to expand and enrich article content when full-text is unavailable. |
+| **Newsletter Subscription** | Email subscription service backed by Firebase Firestore and EmailJS for new subscriber notifications. |
+| **Support via Stripe** | Integrated "Buy Me a Coffee" donation flow powered by Stripe Checkout for audience support. |
+
+---
+
+## Tech Stack
+
+- **Frontend**: React 19 · TypeScript · Vite · Tailwind CSS v4
+- **Data**: NewsData.io API · Google Gemini AI
+- **Backend**: Vercel Serverless Functions
+- **Database**: Firebase Firestore
+- **Payments**: Stripe Checkout
+- **Email**: EmailJS
+
+---
+
+## Local Development
+
+**Prerequisites:** Node.js 18+
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Configure environment variables
+cp .env.example .env
+# Fill in: GEMINI_API_KEY, NEWSDATA_API_KEY, EMAILJS_*, STRIPE_SECRET_KEY, APP_URL
+
+# 3. Run the development server
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`.
+
+---
+
+## Deployment
+
+This project is deployed on **Vercel**. Push to the main branch to trigger an automatic deployment.
+
+Ensure the following environment variables are configured in your Vercel project settings:
+
+- `STRIPE_SECRET_KEY`
+- `APP_URL`
+- `GEMINI_API_KEY`
+- `NEWSDATA_API_KEY`
+- `EMAILJS_SERVICE_ID`, `EMAILJS_TEMPLATE_ID`, `EMAILJS_PUBLIC_KEY`
+
+---
+
+## License
+
+© 2026 Byte_daily. All rights reserved.
