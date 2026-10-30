@@ -10,7 +10,6 @@
 **Byte_daily** is a real-time technology news platform focused on the African tech ecosystem and global innovation. It aggregates, curates, and delivers high-signal news from Nairobi's Silicon Savannah and international technology markets — formatted for readability and speed.
 
 The platform is designed to keep professionals, founders, and enthusiasts informed on what matters, without the noise.
-
 ---
 
 ## Services
@@ -21,7 +20,6 @@ The platform is designed to keep professionals, founders, and enthusiasts inform
 | **AI Article Synthesis** | Powered by Gemini AI to expand and enrich article content when full-text is unavailable. |
 | **Newsletter Subscription** | Email subscription service backed by Firebase Firestore and EmailJS for new subscriber notifications. |
 | **Support via Stripe** | Integrated "Buy Me a Coffee" donation flow powered by Stripe Checkout for audience support. |
-
 ---
 
 ## Tech Stack
