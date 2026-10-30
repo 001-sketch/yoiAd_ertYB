@@ -1,5 +1,5 @@
 # Byte_daily — Nairobi Tech Pulse
-![Project Logo]([https://example.com](https://yoi-ad-ert-yb.vercel.app/))
+![Project Logo](<img width="1254" height="1254" alt="Neon Chip Byte Daily Logo" src="https://github.com/user-attachments/assets/3ca9b3cc-909b-4f43-87b5-5143d973cce1" />)
 
 > Real-time tech intelligence synthesized for the modern pioneer. From the streets of Nairobi to the clusters of Silicon Valley.
 
