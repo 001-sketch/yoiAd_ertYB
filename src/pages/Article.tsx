@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, Calendar, User, Tag, Share2, Globe, Loader2 } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Share2, Globe, Loader2 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { NewsItem } from '../types';
+import { getArticleById } from '../services/newsService';
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-export const Article = () => {
+// Safe URL protocol validator to protect against malicious markdown links (XSS)
+const sanitizeMarkdownUrl = (url: string): string => {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (/^(https?:\/\/|mailto:|tel:|\/|#)/i.test(trimmed)) {
+    return trimmed;
+  }
+  return '';
+};
+
+export const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
@@ -18,36 +29,51 @@ export const Article = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!article && id) {
-      // Simulate "scrapping" if we don't have the data
-      // In a real app, this would fetch from a database or a scraping service
-      scrapArticleData(id);
+      loadArticle(id);
     }
   }, [id, article]);
 
-  const scrapArticleData = async (articleId: string) => {
+  const loadArticle = async (articleId: string) => {
     setLoading(true);
     try {
-      // We simulate a scrap by asking Gemini to reconstruct the article based on the ID (title slug)
-      const prompt = `System: You are a news scraping engine. 
-      Input ID: ${articleId}
-      Task: Reconstruct the full tech news article for this ID.
-      Return a JSON object with: title, summary, content (markdown, 1000+ words), date, tag, author, sourceUrl.
-      Current Date: April 30, 2026.`;
+      // 1. First try to resolve from active news cache / registry
+      const localArticle = await getArticleById(articleId);
+      if (localArticle) {
+        setArticle(localArticle);
+        return;
+      }
+
+      // 2. Fall back to AI synthesis if not found in cache
+      await scrapArticleData(articleId);
+    } catch (err) {
+      console.error('Error loading article:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const scrapArticleData = async (articleId: string) => {
+    try {
+      const prompt = `System: You are a news synthesis engine for Byte_daily.
+Input ID: ${articleId}
+Task: Reconstruct the full tech news article for this ID.
+Return a valid JSON object matching: {"title": string, "summary": string, "content": string (markdown format), "date": string, "tag": string, "author": string, "sourceUrl": string}.
+Focus: East African / Global tech ecosystem.`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-2.5-flash",
         contents: prompt,
         config: {
           responseMimeType: "application/json",
         }
       });
 
-      const data = JSON.parse(response.text.trim());
-      setArticle({ ...data, id: articleId } as NewsItem);
+      if (response.text) {
+        const data = JSON.parse(response.text.trim());
+        setArticle({ ...data, id: articleId } as NewsItem);
+      }
     } catch (error) {
-      console.error("Error scrapping article:", error);
-    } finally {
-      setLoading(false);
+      console.error("Error synthesizing article data:", error);
     }
   };
 
@@ -79,7 +105,7 @@ export const Article = () => {
       >
         <button 
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-xs font-mono text-text-muted hover:text-primary transition-colors uppercase tracking-widest"
+          className="flex items-center gap-2 text-xs font-mono text-text-muted hover:text-primary transition-colors uppercase tracking-widest cursor-pointer"
         >
           <ArrowLeft size={14} /> Back to Pulse
         </button>
@@ -108,24 +134,47 @@ export const Article = () => {
 
         {article.imageUrl && (
           <div className="aspect-video w-full rounded-2xl overflow-hidden tech-border">
-            <img src={article.imageUrl} alt={article.title} className="w-full h-full object-cover" />
+            <img 
+              src={article.imageUrl} 
+              alt={article.title} 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const parent = e.currentTarget.parentElement;
+                if (parent) parent.style.display = 'none';
+              }} 
+            />
           </div>
         )}
 
         <div className="prose prose-invert prose-primary max-w-none font-light leading-loose text-gray-300">
-          <Markdown>{article.content}</Markdown>
+          <Markdown urlTransform={sanitizeMarkdownUrl}>
+            {article.content}
+          </Markdown>
         </div>
 
         <div className="pt-12 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-6">
-            <button className="flex items-center gap-2 text-xs font-mono text-text-muted hover:text-primary transition-colors uppercase">
+            <button 
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: article.title,
+                    text: article.summary,
+                    url: window.location.href,
+                  }).catch(() => {});
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                }
+              }}
+              className="flex items-center gap-2 text-xs font-mono text-text-muted hover:text-primary transition-colors uppercase cursor-pointer"
+            >
               <Share2 size={16} /> Share Signal
             </button>
             {article.sourceUrl && (
               <a 
                 href={article.sourceUrl} 
                 target="_blank" 
-                rel="no-referrer"
+                rel="noreferrer noopener"
                 className="flex items-center gap-2 text-xs font-mono text-text-muted hover:text-primary transition-colors uppercase"
               >
                 <Globe size={16} /> Original Source
@@ -139,7 +188,7 @@ export const Article = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-xs font-display font-bold uppercase tracking-tight">{article.author}</span>
-              <span className="text-[10px] font-mono text-text-muted uppercase">Senior Tech Analyst</span>
+              <span className="text-[10px] font-mono text-text-muted uppercase">Tech Intelligence Bureau</span>
             </div>
           </div>
         </div>

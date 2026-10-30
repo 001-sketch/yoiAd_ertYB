@@ -1,7 +1,6 @@
 import React from 'react';
-import { Cpu, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Cpu } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { SITE_NAME, FOOTER_SECTIONS } from '../constants';
 
 export const Footer = () => {

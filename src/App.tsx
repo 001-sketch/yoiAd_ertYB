@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { Article } from './pages/Article';
 import { Info } from './pages/Info';
 import { Footer } from './components/Footer';
+import { BuyMeCoffee } from './components/BuyMeCoffee';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <BuyMeCoffee />
       </div>
     </Router>
   );

@@ -5,8 +5,88 @@ import {defineConfig, loadEnv} from 'vite';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
+  const stripeSecretKey = env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY;
+
+  const stripeDevPlugin = {
+    name: 'stripe-dev-api',
+    configureServer(server: any) {
+      server.middlewares.use('/api/create-checkout', async (req: any, res: any) => {
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+
+        if (req.method !== 'POST') {
+          res.statusCode = 405;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Method not allowed' }));
+          return;
+        }
+
+        if (!stripeSecretKey) {
+          res.statusCode = 500;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'STRIPE_SECRET_KEY is missing in your local .env file.' }));
+          return;
+        }
+
+        let body = '';
+        req.on('data', (chunk: any) => {
+          body += chunk;
+        });
+
+        req.on('end', async () => {
+          try {
+            const { amount, message } = JSON.parse(body || '{}');
+            const parsedAmount = Number(amount);
+            if (isNaN(parsedAmount) || !isFinite(parsedAmount)) {
+              res.statusCode = 400;
+              res.setHeader('Content-Type', 'application/json');
+              res.end(JSON.stringify({ error: 'Invalid donation amount.' }));
+              return;
+            }
+            const coffeeAmount = Math.min(Math.max(Math.round(parsedAmount), 1), 100);
+            const sanitizedMessage = typeof message === 'string'
+              ? message.trim().slice(0, 200)
+              : undefined;
+
+            const { default: Stripe } = await import('stripe');
+            const stripe = new Stripe(stripeSecretKey);
+
+            const session = await stripe.checkout.sessions.create({
+              line_items: [
+                {
+                  price_data: {
+                    currency: 'usd',
+                    product_data: {
+                      name: `☕ Buy ByteDaily ${coffeeAmount === 1 ? 'a Coffee' : `${coffeeAmount} Coffees`}`,
+                      description: sanitizedMessage || 'Thanks for supporting ByteDaily News!',
+                      tax_code: 'txcd_10000000', // General - Electronically Supplied Services (eligible for Managed Payments)
+                    },
+                    unit_amount: coffeeAmount * 100,
+                  },
+                  quantity: 1,
+                },
+              ],
+              mode: 'payment',
+              success_url: `http://localhost:3000/?payment=success`,
+              cancel_url: `http://localhost:3000/?payment=cancelled`,
+              submit_type: 'donate',
+            });
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ url: session.url }));
+          } catch (err: any) {
+            console.error('Local Stripe dev error:', err?.message || err);
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: err.message || 'Failed to create checkout session' }));
+          }
+        });
+      });
+    },
+  };
+
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), stripeDevPlugin],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || process.env.GEMINI_API_KEY),
       'process.env.NEWSDATA_API_KEY': JSON.stringify(env.NEWSDATA_API_KEY || process.env.NEWSDATA_API_KEY || 'pub_6b2014d565ad49a58bee720bb2521d8d'),

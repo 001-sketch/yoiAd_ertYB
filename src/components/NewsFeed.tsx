@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
+import { Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { CATEGORIES, TIMEFRAMES } from '../constants';
 import { NewsCategory, NewsTimeframe, NewsItem } from '../types';
