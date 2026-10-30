@@ -1,5 +1,5 @@
 # Byte_daily — Nairobi Tech Pulse
-<img width="125" height="125" alt="Neon Chip Byte Daily Logo" src="https://github.com/user-attachments/assets/3ca9b3cc-909b-4f43-87b5-5143d973cce1" />
+<img width="850" height="1000" alt="Neon Chip Byte Daily Logo" src="https://github.com/user-attachments/assets/3ca9b3cc-909b-4f43-87b5-5143d973cce1" />
 
 > Real-time tech intelligence synthesized for the modern pioneer. From the streets of Nairobi to the clusters of Silicon Valley.
 
