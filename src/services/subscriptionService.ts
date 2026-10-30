@@ -77,22 +77,18 @@ async function dispatchEmailNotification(subscriberEmail: string): Promise<boole
   };
 
   try {
-    console.log(`[EmailJS] Initiating dispatch to ${NOTIFICATION_RECIPIENT} for: ${subscriberEmail}`);
+    const masked = subscriberEmail.replace(/^(.)(.*)(@.*)$/, (_, a, _b, c) => `${a}***${c}`);
+    console.log(`[EmailJS] Initiating dispatch to notification endpoint for: ${masked}`);
     const res = await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
       templateParams,
       EMAILJS_PUBLIC_KEY
     );
-    console.log(`[EmailJS] ✅ Dispatch successful! Status: ${res.status}, Text: ${res.text}`);
+    console.log(`[EmailJS] ✅ Dispatch completed. Status: ${res.status}`);
     return true;
   } catch (err: any) {
-    console.error('[EmailJS] ❌ Dispatch failed:', {
-      error: err,
-      status: err?.status,
-      text: err?.text,
-      message: err?.message
-    });
+    console.error('[EmailJS] ❌ Dispatch failed:', err?.message || 'Network error');
     return false;
   }
 }

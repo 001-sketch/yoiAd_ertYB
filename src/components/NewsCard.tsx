@@ -72,7 +72,7 @@ export const NewsCard: React.FC<NewsCardProps> = ({ item, index }) => {
               <a
                 href={item.sourceUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
                 title="View original publisher report"
                 className="text-text-muted hover:text-white transition-colors p-1"
                 onClick={(e) => e.stopPropagation()}

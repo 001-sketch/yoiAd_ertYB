@@ -1,25 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 const app = initializeApp(firebaseConfig);
-// CRITICAL: The app will break without the firestoreDatabaseId passed here
+// CRITICAL: The app requires the firestoreDatabaseId specified in firebase-applet-config.json
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
-
-// Validation check as per instructions
-async function testConnection() {
-  try {
-    // Testing connection to a non-existent doc to verify firestore availability
-    await getDocFromServer(doc(db, 'system', 'ping'));
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration or network status.");
-    }
-  }
-}
-testConnection();
 
 export enum OperationType {
   CREATE = 'create',
@@ -39,7 +26,7 @@ export interface FirestoreErrorInfo {
     email?: string | null;
     emailVerified?: boolean | null;
     isAnonymous?: boolean | null;
-  }
+  };
 }
 
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
@@ -52,8 +39,8 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
       isAnonymous: auth.currentUser?.isAnonymous,
     },
     operationType,
-    path
+    path,
   };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  console.error('[Firestore Error]:', errInfo.error);
   throw new Error(JSON.stringify(errInfo));
 }
